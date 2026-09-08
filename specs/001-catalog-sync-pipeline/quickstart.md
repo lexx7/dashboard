@@ -1,12 +1,13 @@
 # Quickstart: проверка ETL-пайплайна «Источник → Витрина товаров»
 
 Сквозная проверка фичи. Модель данных — [data-model.md](data-model.md), REST-контракт —
-[contracts/operational-api.md](contracts/operational-api.md). Соответствует plan.md
-(Maven, Docker Compose, два контейнера PostgreSQL).
+[contracts/operational-api.md](contracts/operational-api.md). Реализация — в текущем
+репозитории `dashboard/` (Gradle, пакет `com.example.dashboard`), окружение — Docker Compose
+в корне репозитория (plan.md §6).
 
 ## Пререквизиты
 
-- JDK 21, Docker + Docker Compose.
+- JDK 25, Docker + Docker Compose.
 - Окружение: `docker compose up -d` поднимает `db-source` и `db-mart`; Flyway накатывает
   `db/migration/source` и `db/migration/mart` соответственно.
 - Тестовые данные: `scripts/seed_source.sql` наполняет `db-source.products` (1 млн строк
@@ -15,23 +16,23 @@
 ## Сборка и тесты
 
 ```bash
-./mvnw verify            # компиляция + unit + Testcontainers-тесты
-./mvnw spotless:check    # формат
+./gradlew build            # компиляция + unit + Testcontainers-тесты
+./gradlew spotlessCheck    # формат
 ```
 
 Ожидаемо: зелёные `IncrementalSyncTest`, `CrashRecoveryTest`, `OutOfOrderTest`,
 `BrokenRecordTest`, `ReconciliationTest` (маппинг на SC — plan.md §7).
-`PerformanceTest` — отдельный профиль, запуск по требованию:
+`PerformanceTest` — под JUnit-тегом `perf`, отдельный запуск:
 
 ```bash
-./mvnw verify -Pperf
+./gradlew perfTest
 ```
 
 ## Локальный запуск
 
 ```bash
-docker compose up -d     # db-source, db-mart
-./mvnw spring-boot:run
+docker compose up -d       # db-source, db-mart
+./gradlew bootRun
 ```
 
 ## Сценарии валидации
@@ -73,7 +74,7 @@ docker compose up -d     # db-source, db-mart
 ### 6. Производительность (SC-1)
 
 1. `scripts/seed_source.sql` — 1 млн строк в источник.
-2. Полный прогон с нулевого чекпоинта, замер времени (`PerformanceTest`, профиль `perf`).
+2. Полный прогон с нулевого чекпоинта, замер времени (`./gradlew perfTest`).
 3. Критерий: укладывается в ночное окно (≤4 ч).
 
 ## Критерии приёмки

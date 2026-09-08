@@ -1,6 +1,6 @@
 # Data Model: ETL-пайплайн «Источник → Витрина товаров»
 
-Две физические БД (отдельные контейнеры PostgreSQL 16): `db-source` (read-only для
+Две физические БД (отдельные контейнеры PostgreSQL 17): `db-source` (read-only для
 пайплайна) и `db-mart` (витрина + служебные таблицы). Схемы версионируются Flyway:
 `db/migration/source/V*.sql` и `db/migration/mart/V*.sql`. DDL соответствует plan.md §4.
 

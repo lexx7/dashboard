@@ -2,7 +2,7 @@
 
 ## Стек и технологии
 - Java 25
-- Spring Boot 3.x
+- Spring Boot 4.x
 - PostgreSQL (основная БД)
 - Apache Kafka (event streaming)
 - Maven / Gradle

@@ -5,12 +5,18 @@ NEEDS CLARIFICATION нет.
 
 ## R1. Стек и оркестрация окружения
 
-- **Decision**: Java 21, Spring Boot 3.3, Maven (mvnw), Spotless для формата; окружение —
-  Docker Compose с двумя контейнерами PostgreSQL 16 (`db-source`, `db-mart`).
-- **Rationale**: Зафиксировано в plan.md §2. Два отдельных контейнера честно имитируют две
-  разные системы (изоляция «чужой» БД, отдельные наборы миграций).
-- **Alternatives considered**: две схемы в одной БД (проще, но нет честной изоляции);
-  Gradle/Java 25/Spring Boot 4.1 текущего репозитория (см. «Открытый вопрос» ниже).
+- **Decision**: Реализация в текущем репозитории `dashboard/`: Gradle, Java 25,
+  Spring Boot 4.x (совпадает с `build.gradle` и plan.md §2); новый код — в пакете
+  `com.example.dashboard` с подпакетами `config`, `source`, `pipeline`, `mart`,
+  `reconcile`, `api` (plan.md §6). В `build.gradle` добавляются зависимости
+  (spring-boot-starter-jdbc, flyway-core, flyway-database-postgresql, postgresql,
+  testcontainers) и плагин Spotless. Окружение — `docker-compose.yml` в корне
+  репозитория с двумя контейнерами PostgreSQL 17 (`db-source`, `db-mart`).
+- **Rationale**: plan.md §2 и §6 (после правок владельца) фиксируют стек и структуру
+  текущего репозитория: Java 25, Spring Boot 4.x, Gradle — полностью совпадает с
+  `build.gradle`; противоречий не осталось.
+- **Alternatives considered**: standalone Maven-подпроект `task7-etl-pipeline/`
+  (отклонён правкой plan.md §6); две схемы в одной БД (нет честной изоляции).
 
 ## R2. Курсорное чтение источника
 
@@ -79,15 +85,14 @@ NEEDS CLARIFICATION нет.
 - **Decision**: JUnit 5 + Testcontainers (два PG-контейнера); набор тестов по маппингу
   plan.md §7: `IncrementalSyncTest`, `CrashRecoveryTest` (interrupt между батчами),
   `OutOfOrderTest`, `BrokenRecordTest`, `ReconciliationTest`, `PerformanceTest`
-  (отдельный профиль, seed 1 млн строк).
+  (JUnit-тег `perf` + отдельный Gradle-task `perfTest`, seed 1 млн строк).
 - **Rationale**: Каждый тест замаплен на критерий успеха (SC-1…SC-5); Testcontainers даёт
   воспроизводимые две БД.
 - **Alternatives considered**: H2/in-memory — диалект и `ON CONFLICT` отличаются от PG.
 
-## Открытый вопрос (для фазы implement, не блокирует план)
+## Ранее открытый вопрос — закрыт
 
-- plan.md описывает standalone Maven-проект `task7-etl-pipeline/` (Java 21, Spring Boot
-  3.3), тогда как текущий репозиторий — Gradle, Java 25, Spring Boot 4.1.1. На фазе
-  реализации нужно выбрать: создать подпроект `task7-etl-pipeline/` рядом с текущим
-  приложением (соответствует plan.md §6) или реализовать фичу в текущем репозитории с его
-  стеком. По умолчанию следуем plan.md — отдельный подпроект.
+- Размещение фичи решено правками plan.md §2 и §6: реализация в текущем репозитории
+  `dashboard/` (Gradle, Java 25, Spring Boot 4.x), пакет `com.example.dashboard`,
+  PostgreSQL 17, `docker-compose.yml` в корне. Вариант standalone Maven-подпроекта
+  отклонён. Противоречий между §2 и §6 плана не осталось.

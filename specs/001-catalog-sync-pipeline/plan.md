@@ -13,9 +13,9 @@
 
 ## 2. Technical Context
 
-- **Язык/платформа**: Java 21, Spring Boot 3.3
-- **Сборка**: Maven (mvnw)
-- **Хранилище**: PostgreSQL 16 — два контейнера (`db-source`, `db-mart`),
+- **Язык/платформа**: Java 25, Spring Boot 4.x
+- **Сборка**: Gradle (gradle)
+- **Хранилище**: PostgreSQL 17 — два контейнера (`db-source`, `db-mart`),
   что честно имитирует две разные системы (FR-1, US-5)
 - **Миграции**: Flyway, отдельные наборы миграций на каждую БД
 - **Планировщик**: Spring `@Scheduled` (US-4); ручной запуск через
@@ -152,13 +152,16 @@ public interface Reconciler {
 ## 6. Структура проекта
 
 ```
-task7-etl-pipeline/
-├── spec.md                      # есть (фаза /specify)
-├── plan.md                      # этот файл (фаза /plan)
-├── tasks.md                     # следующая фаза (/tasks)
+dashboard/
+├── specs/
+│   └── 001-catalog-sync-pipeline
+│       ├── spec.md                      # есть (фаза /specify)
+│       ├── plan.md                      # этот файл (фаза /plan)
+│       ├── tasks.md                     # следующая фаза (/tasks)
+│       └── ...                          # другие папки проекта
 ├── docker-compose.yml           # db-source, db-mart
-├── pom.xml
-├── src/main/java/com/example/etl/
+├── build.gradle
+├── src/main/java/com/example/dashboard/
 │   ├── EtlApplication.java
 │   ├── config/      SourceDbConfig, MartDbConfig   # два DataSource
 │   ├── source/      SourceReader, SourceProduct
