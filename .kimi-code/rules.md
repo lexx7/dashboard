@@ -155,4 +155,4 @@ class OrderServiceIntegrationTest {
 - SonarQube / Checkstyle / SpotBugs — желательно.
 
 ## SPECS
-Файлы спецификаций должны оформляться на русском
+Файлы спецификаций и планы должны оформляться на русском
