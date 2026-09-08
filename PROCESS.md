@@ -60,3 +60,10 @@
   последней записи батча (битые не блокируют курсор); `Reconciler` (count-сверка),
   `POST /api/etl/reconcile`, `ScheduledReconcileRunner` (cron 03:00).
   Поломок не было.
+
+- 2026-09-08 | Phase 8 (T038–T042, Polish) | OK | `./gradlew spotlessApply build`
+  зелёный (perf-тег исключён из test); `./gradlew perfTest` зелёный — 1 млн строк,
+  полный прогон за 40.4 с при бюджете 4 ч (SC-1). Сделано: `scripts/seed_source.sql`
+  (generate_series, 1 млн), `PerformanceTest` (@Tag perf) + Gradle-task `perfTest`,
+  README по quickstart. Сценарии quickstart 1–6 подтверждены: 1–5 — интеграционными
+  тестами US1–US5, 6 — perfTest. Поломок не было.

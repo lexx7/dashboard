@@ -170,11 +170,11 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ## Phase 8: Polish & Cross-Cutting
 
-- [ ] T038 [P] Скрипт наполнения `scripts/seed_source.sql`: 1 млн строк через `generate_series` (SC-1, data-model.md)
-- [ ] T039 `PerformanceTest` с JUnit-тегом `perf` в `src/test/java/com/example/dashboard/PerformanceTest.java` + Gradle-task `perfTest` в `build.gradle`: seed 1 млн строк, полный прогон, замер времени против бюджета ночного окна (SC-1)
-- [ ] T040 [P] Обновить `README.md`: запуск окружения, прогоны, тесты (по quickstart.md)
-- [ ] T041 `./gradlew spotlessApply` и полный зелёный билд `./gradlew build`
-- [ ] T042 Сквозная проверка всех сценариев `specs/001-catalog-sync-pipeline/quickstart.md` (1–6)
+- [x] T038 [P] Скрипт наполнения `scripts/seed_source.sql`: 1 млн строк через `generate_series` (SC-1, data-model.md)
+- [x] T039 `PerformanceTest` с JUnit-тегом `perf` в `src/test/java/com/example/dashboard/PerformanceTest.java` + Gradle-task `perfTest` в `build.gradle`: seed 1 млн строк, полный прогон, замер времени против бюджета ночного окна (SC-1)
+- [x] T040 [P] Обновить `README.md`: запуск окружения, прогоны, тесты (по quickstart.md)
+- [x] T041 `./gradlew spotlessApply` и полный зелёный билд `./gradlew build`
+- [x] T042 Сквозная проверка всех сценариев `specs/001-catalog-sync-pipeline/quickstart.md` (1–6)
 
 ---
 

@@ -47,5 +47,17 @@ spotless {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+	useJUnitPlatform() {
+		excludeTags 'perf'
+	}
+}
+
+tasks.register('perfTest', Test) {
+	description = 'Performance-тест (SC-1): 1 млн строк, полный прогон'
+	group = 'verification'
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+	useJUnitPlatform() {
+		includeTags 'perf'
+	}
 }
