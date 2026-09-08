@@ -1,0 +1,38 @@
+services:
+  db-source:
+    image: postgres:17
+    container_name: db-source
+    environment:
+      POSTGRES_USER: etl
+      POSTGRES_PASSWORD: etl
+      POSTGRES_DB: source
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-source-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U etl -d source"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  db-mart:
+    image: postgres:17
+    container_name: db-mart
+    environment:
+      POSTGRES_USER: etl
+      POSTGRES_PASSWORD: etl
+      POSTGRES_DB: mart
+    ports:
+      - "5434:5432"
+    volumes:
+      - db-mart-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U etl -d mart"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db-source-data:
+  db-mart-data:

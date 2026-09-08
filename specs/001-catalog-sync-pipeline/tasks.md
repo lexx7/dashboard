@@ -29,10 +29,10 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ## Phase 1: Setup (инициализация проекта)
 
-- [ ] T001 Добавить зависимости в `build.gradle`: spring-boot-starter-jdbc, flyway-core, flyway-database-postgresql, postgresql (runtime); test: testcontainers (junit-jupiter, postgresql); добавить `@EnableScheduling` в существующий `src/main/java/com/example/dashboard/DashboardApplication.java` (новый application-класс НЕ создавать — plan.md §6)
-- [ ] T002 [P] Создать `docker-compose.yml` в корне репозитория: сервисы `db-source` и `db-mart` (PostgreSQL 17, отдельные порты и volume'ы)
-- [ ] T003 [P] Подключить плагин Spotless в `build.gradle` (конфигурация для Java)
-- [ ] T004 [P] Создать `src/main/resources/application.yml`: два DataSource (`source`, `mart`), размер батча (настраиваемый, по умолчанию 1000 — plan.md §3), окно отставания 30s, интервал опроса источника 60 секунд (plan.md §3) и cron сверки 03:00
+- [x] T001 Добавить зависимости в `build.gradle`: spring-boot-starter-jdbc, flyway-core, flyway-database-postgresql, postgresql (runtime); test: testcontainers (junit-jupiter, postgresql); добавить `@EnableScheduling` в существующий `src/main/java/com/example/dashboard/DashboardApplication.java` (новый application-класс НЕ создавать — plan.md §6)
+- [x] T002 [P] Создать `docker-compose.yml` в корне репозитория: сервисы `db-source` и `db-mart` (PostgreSQL 17, отдельные порты и volume'ы)
+- [x] T003 [P] Подключить плагин Spotless в `build.gradle` (конфигурация для Java)
+- [x] T004 [P] Создать `src/main/resources/application.yml`: два DataSource (`source`, `mart`), размер батча (настраиваемый, по умолчанию 1000 — plan.md §3), окно отставания 30s, интервал опроса источника 60 секунд (plan.md §3) и cron сверки 03:00
 
 ---
 

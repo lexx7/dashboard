@@ -1,3 +1,21 @@
 spring:
   application:
     name: dashboard
+  datasource:
+    source:
+      jdbc-url: jdbc:postgresql://localhost:5433/source
+      username: etl
+      password: etl
+    mart:
+      jdbc-url: jdbc:postgresql://localhost:5434/mart
+      username: etl
+      password: etl
+  flyway:
+    enabled: false # миграции запускаются per-datasource в Phase 2 (SourceDbConfig/MartDbConfig)
+
+etl:
+  pipeline: catalog-sync
+  batch-size: 1000
+  lag-window: PT30S
+  poll-interval: PT60S
+  reconcile-cron: "0 0 3 * * *"
