@@ -63,18 +63,18 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ### Tests for User Story 1
 
-- [ ] T011 [US1] Интеграционный `IncrementalSyncTest` в `src/test/java/com/example/dashboard/IncrementalSyncTest.java`: новые/изменённые записи переносятся, пустой запуск не меняет витрину, счётчики прогона корректны (SC-2). Тест падает до реализации.
+- [x] T011 [US1] Интеграционный `IncrementalSyncTest` в `src/test/java/com/example/dashboard/IncrementalSyncTest.java`: новые/изменённые записи переносятся, пустой запуск не меняет витрину, счётчики прогона корректны (SC-2). Тест падает до реализации.
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] `CheckpointRepo` в `src/main/java/com/example/dashboard/mart/CheckpointRepo.java`: чтение/продвижение курсора `(last_cursor, last_sku)` (FR-2)
-- [ ] T013 [P] [US1] `StagingRepo.insertAll` в `src/main/java/com/example/dashboard/mart/StagingRepo.java`: сохранение сырых записей с `run_id` (FR-5)
-- [ ] T014 [P] [US1] `RunRepo` в `src/main/java/com/example/dashboard/mart/RunRepo.java`: start/finish/addStats по `etl_run` (FR-8)
-- [ ] T015 [P] [US1] `MartRepo.upsertAll` в `src/main/java/com/example/dashboard/mart/MartRepo.java`: батчевый `INSERT ... ON CONFLICT (sku) DO UPDATE` (FR-3)
-- [ ] T016 [P] [US1] `SourceReader.fetchSince(Instant cursor, String afterSku, int limit)` в `src/main/java/com/example/dashboard/source/SourceReader.java`: курсорная выборка `(updated_at, sku) > (?, ?)` с окном отставания `updated_at < now() - 30s` (FR-1, research R2)
-- [ ] T017 [US1] `MartLoader.loadBatch` в `src/main/java/com/example/dashboard/mart/MartLoader.java`: `@Transactional("martTransactionManager")` — staging → upsert → checkpoint → статистика атомарно (FR-2, FR-3, plan.md §8)
-- [ ] T018 [US1] `EtlPipeline` в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`: цикл батчей `extract → loadBatch` до исчерпания, создание/завершение прогона через `RunRepo` (FR-1, FR-8)
-- [ ] T019 [US1] Прогнать `src/test/java/com/example/dashboard/IncrementalSyncTest.java` до зелёного состояния
+- [x] T012 [P] [US1] `CheckpointRepo` в `src/main/java/com/example/dashboard/mart/CheckpointRepo.java`: чтение/продвижение курсора `(last_cursor, last_sku)` (FR-2)
+- [x] T013 [P] [US1] `StagingRepo.insertAll` в `src/main/java/com/example/dashboard/mart/StagingRepo.java`: сохранение сырых записей с `run_id` (FR-5)
+- [x] T014 [P] [US1] `RunRepo` в `src/main/java/com/example/dashboard/mart/RunRepo.java`: start/finish/addStats по `etl_run` (FR-8)
+- [x] T015 [P] [US1] `MartRepo.upsertAll` в `src/main/java/com/example/dashboard/mart/MartRepo.java`: батчевый `INSERT ... ON CONFLICT (sku) DO UPDATE` (FR-3)
+- [x] T016 [P] [US1] `SourceReader.fetchSince(Instant cursor, String afterSku, int limit)` в `src/main/java/com/example/dashboard/source/SourceReader.java`: курсорная выборка `(updated_at, sku) > (?, ?)` с окном отставания `updated_at < now() - 30s` (FR-1, research R2)
+- [x] T017 [US1] `MartLoader.loadBatch` в `src/main/java/com/example/dashboard/mart/MartLoader.java`: `@Transactional("martTransactionManager")` — staging → upsert → checkpoint → статистика атомарно (FR-2, FR-3, plan.md §8)
+- [x] T018 [US1] `EtlPipeline` в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`: цикл батчей `extract → loadBatch` до исчерпания, создание/завершение прогона через `RunRepo` (FR-1, FR-8)
+- [x] T019 [US1] Прогнать `src/test/java/com/example/dashboard/IncrementalSyncTest.java` до зелёного состояния
 
 **Checkpoint**: US1 полностью работает и проверяется независимо (MVP).
 

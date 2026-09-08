@@ -18,3 +18,12 @@
   Отклонение от tasks.md: T010 — вместо logback-spring.xml + logstash-encoder
   (новая зависимость запрещена правилами без подтверждения) включён нативный
   structured logging Spring Boot (`logging.structured.format.console: logstash`).
+
+- 2026-09-08 | Phase 3 (T011–T019, US1 MVP) | OK | `IncrementalSyncTest` (4 теста) зелёный:
+  перенос новых/изменённых записей, пустой запуск — 0 строк (SC-2), tie-breaker по sku
+  при одинаковых updated_at. Поломки и починка:
+  1. Jackson отсутствует в classpath (Boot 4 webmvc его не тянет) → payload для
+     staging_raw сериализуется вручную в `StagingRepo` (простые поля, экранирование
+     кавычек); новых зависимостей не добавлял.
+  2. Тестовые insert'ы передавали цену строкой в `numeric` → литерал/каст `?::numeric`
+     в тестовых хелперах.
