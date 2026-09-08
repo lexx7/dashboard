@@ -153,3 +153,6 @@ class OrderServiceIntegrationTest {
 - Сборка и тесты в Docker-контейнере или с поднятым Testcontainers.
 - Проверка `mvn verify` перед merge.
 - SonarQube / Checkstyle / SpotBugs — желательно.
+
+## SPECS
+Файлы спецификаций должны оформляться на русском
