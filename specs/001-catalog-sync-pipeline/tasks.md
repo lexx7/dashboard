@@ -90,13 +90,13 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ### Tests for User Story 2
 
-- [ ] T020 [US2] `CrashRecoveryTest` в `src/test/java/com/example/dashboard/CrashRecoveryTest.java`: старт прогона → interrupt между батчами → рестарт → сверка «0 дублей, 0 потерь» (SC-3). Тест падает до реализации.
+- [x] T020 [US2] `CrashRecoveryTest` в `src/test/java/com/example/dashboard/CrashRecoveryTest.java`: старт прогона → interrupt между батчами → рестарт → сверка «0 дублей, 0 потерь» (SC-3). Тест падает до реализации.
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Обработка прерванных прогонов при старте приложения: осиротевшие `RUNNING` помечаются `FAILED`, чекпоинт остаётся на последнем подтверждённом батче — стартовый хук в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`
-- [ ] T022 [US2] Корректная обработка прерывания потока (interrupt) между батчами: откат текущей транзакции, финализация прогона `FAILED` — в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`
-- [ ] T023 [US2] Прогнать `src/test/java/com/example/dashboard/CrashRecoveryTest.java` до зелёного состояния
+- [x] T021 [US2] Обработка прерванных прогонов при старте приложения: осиротевшие `RUNNING` помечаются `FAILED`, чекпоинт остаётся на последнем подтверждённом батче — стартовый хук в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`
+- [x] T022 [US2] Корректная обработка прерывания потока (interrupt) между батчами: откат текущей транзакции, финализация прогона `FAILED` — в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`
+- [x] T023 [US2] Прогнать `src/test/java/com/example/dashboard/CrashRecoveryTest.java` до зелёного состояния
 
 **Checkpoint**: US2 работает; crash-тест зелёный.
 

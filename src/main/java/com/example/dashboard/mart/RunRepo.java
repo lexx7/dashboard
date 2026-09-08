@@ -23,6 +23,13 @@ public class RunRepo {
 		jdbc.update("UPDATE etl_run SET finished_at = now(), status = ? WHERE id = ?", status, runId);
 	}
 
+	public int failOrphanedRuns(String pipeline) {
+		return jdbc.update("""
+				UPDATE etl_run SET status = 'FAILED', finished_at = COALESCE(finished_at, now())
+				WHERE pipeline = ? AND status = 'RUNNING'
+				""", pipeline);
+	}
+
 	public void addStats(long runId, long staged, long loaded, long failed) {
 		jdbc.update("""
 				UPDATE etl_run

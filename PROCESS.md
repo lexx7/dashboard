@@ -27,3 +27,10 @@
      кавычек); новых зависимостей не добавлял.
   2. Тестовые insert'ы передавали цену строкой в `numeric` → литерал/каст `?::numeric`
      в тестовых хелперах.
+
+- 2026-09-08 | Phase 4 (T020–T023, US2 recovery) | OK | `CrashRecoveryTest` (2 теста)
+  зелёный: interrupt между батчами → прогон FAILED, рестарт с чекпоинта — 0 потерь,
+  0 дублей (SC-3); interrupt до первого батча → FAILED без загрузки. Реализация:
+  проверка `Thread.isInterrupted()` между батчами в `EtlPipeline.run()` +
+  `ApplicationRunner`-хук `failOrphanedRuns` (осиротевшие RUNNING → FAILED при старте).
+  Поломок не было.
