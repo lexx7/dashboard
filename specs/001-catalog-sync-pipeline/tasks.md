@@ -154,15 +154,15 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ### Tests for User Story 5
 
-- [ ] T032 [P] [US5] `BrokenRecordTest` в `src/test/java/com/example/dashboard/BrokenRecordTest.java`: 1000 записей, 5 с отрицательной ценой → 995 в витрине, 5 в `etl_error`, прогон `SUCCESS` (SC-5). Тест падает до реализации.
-- [ ] T033 [P] [US5] `ReconciliationTest` в `src/test/java/com/example/dashboard/ReconciliationTest.java`: удалить 100 записей из витрины → сверка возвращает `mismatch = 100` (SC-4). Тест падает до реализации.
+- [x] T032 [P] [US5] `BrokenRecordTest` в `src/test/java/com/example/dashboard/BrokenRecordTest.java`: 1000 записей, 5 с отрицательной ценой → 995 в витрине, 5 в `etl_error`, прогон `SUCCESS` (SC-5). Тест падает до реализации.
+- [x] T033 [P] [US5] `ReconciliationTest` в `src/test/java/com/example/dashboard/ReconciliationTest.java`: удалить 100 записей из витрины → сверка возвращает `mismatch = 100` (SC-4). Тест падает до реализации.
 
 ### Implementation for User Story 5
 
-- [ ] T034 [US5] Валидация записей и `ErrorRepo` в `src/main/java/com/example/dashboard/mart/`: битые записи (обязательные поля, неотрицательная цена) → `etl_error` с причиной, исключение из upsert, батч не прерывается (FR-6) — доработка `MartLoader.loadBatch`
-- [ ] T035 [US5] `Reconciler.reconcile()` в `src/main/java/com/example/dashboard/reconcile/Reconciler.java`: сравнение `count(*)` источника и витрины, результат `ReconcileReport{sourceCount, martCount, mismatch, details}` (research R6)
-- [ ] T036 [US5] Эндпоинт `POST /api/etl/reconcile` в `src/main/java/com/example/dashboard/api/EtlController.java` + `@Scheduled(cron ...)` ночная сверка 03:00 в `src/main/java/com/example/dashboard/reconcile/ScheduledReconcileRunner.java`
-- [ ] T037 [US5] Прогнать `src/test/java/com/example/dashboard/BrokenRecordTest.java` и `src/test/java/com/example/dashboard/ReconciliationTest.java` до зелёного состояния
+- [x] T034 [US5] Валидация записей и `ErrorRepo` в `src/main/java/com/example/dashboard/mart/`: битые записи (обязательные поля, неотрицательная цена) → `etl_error` с причиной, исключение из upsert, батч не прерывается (FR-6) — доработка `MartLoader.loadBatch`
+- [x] T035 [US5] `Reconciler.reconcile()` в `src/main/java/com/example/dashboard/reconcile/Reconciler.java`: сравнение `count(*)` источника и витрины, результат `ReconcileReport{sourceCount, martCount, mismatch, details}` (research R6)
+- [x] T036 [US5] Эндпоинт `POST /api/etl/reconcile` в `src/main/java/com/example/dashboard/api/EtlController.java` + `@Scheduled(cron ...)` ночная сверка 03:00 в `src/main/java/com/example/dashboard/reconcile/ScheduledReconcileRunner.java`
+- [x] T037 [US5] Прогнать `src/test/java/com/example/dashboard/BrokenRecordTest.java` и `src/test/java/com/example/dashboard/ReconciliationTest.java` до зелёного состояния
 
 **Checkpoint**: US5 работает; аудит, валидация и сверка завершены.
 

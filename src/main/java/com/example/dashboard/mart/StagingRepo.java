@@ -24,7 +24,7 @@ public class StagingRepo {
 				});
 	}
 
-	private String toJson(SourceProduct product) {
+	static String toJson(SourceProduct product) {
 		return "{\"sku\":" + quote(product.sku()) + ",\"name\":" + quote(product.name()) + ",\"price\":"
 				+ product.price() + ",\"updated_at\":\"" + product.updatedAt() + "\"}";
 	}

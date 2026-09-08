@@ -51,3 +51,12 @@
     Duration); в тестах отключён свойством `etl.scheduling.enabled=false`.
   Поломок не было. Замечание: JSON в Boot 4 — Jackson 3 (`tools.jackson`), поэтому
   ручная сериализация payload в `StagingRepo` (Phase 3) была необходимой.
+
+- 2026-09-08 | Phase 7 (T032–T037, US5 аудит/сверка) | OK | `BrokenRecordTest` и
+  `ReconciliationTest` зелёные: 1000 записей с 5 битыми → 995 в витрине, 5 в
+  `etl_error` с причиной, прогон SUCCESS (SC-5); удаление 100 записей из витрины →
+  сверка `mismatch=100` (SC-4). Реализация: валидация в `MartLoader.loadBatch`
+  (обязательные поля, неотрицательная цена) + `ErrorRepo`; чекпоинт продвигается по
+  последней записи батча (битые не блокируют курсор); `Reconciler` (count-сверка),
+  `POST /api/etl/reconcile`, `ScheduledReconcileRunner` (cron 03:00).
+  Поломок не было.

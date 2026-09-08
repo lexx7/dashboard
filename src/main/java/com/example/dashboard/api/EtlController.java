@@ -4,6 +4,8 @@ import com.example.dashboard.mart.RunRepo;
 import com.example.dashboard.mart.RunView;
 import com.example.dashboard.pipeline.EtlPipeline;
 import com.example.dashboard.pipeline.RunConflictException;
+import com.example.dashboard.reconcile.ReconcileReport;
+import com.example.dashboard.reconcile.Reconciler;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
@@ -25,12 +27,15 @@ public class EtlController {
 
 	private final RunRepo runRepo;
 
+	private final Reconciler reconciler;
+
 	private final TaskExecutor taskExecutor;
 
-	public EtlController(EtlPipeline pipeline, RunRepo runRepo,
+	public EtlController(EtlPipeline pipeline, RunRepo runRepo, Reconciler reconciler,
 			@Qualifier("applicationTaskExecutor") TaskExecutor taskExecutor) {
 		this.pipeline = pipeline;
 		this.runRepo = runRepo;
+		this.reconciler = reconciler;
 		this.taskExecutor = taskExecutor;
 	}
 
@@ -39,6 +44,11 @@ public class EtlController {
 		long runId = pipeline.beginRun();
 		taskExecutor.execute(() -> pipeline.executeRun(runId));
 		return Map.of("runId", runId);
+	}
+
+	@PostMapping("/reconcile")
+	public ReconcileReport reconcile() {
+		return reconciler.reconcile();
 	}
 
 	@GetMapping("/run/{id}")
