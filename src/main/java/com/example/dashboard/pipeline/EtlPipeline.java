@@ -49,8 +49,18 @@ public class EtlPipeline implements ApplicationRunner {
 	}
 
 	public long run() {
-		long runId = runRepo.start(pipeline);
+		long runId = beginRun();
+		executeRun(runId);
+		return runId;
+	}
+
+	public long beginRun() {
+		long runId = runRepo.tryStart(pipeline).orElseThrow(() -> new RunConflictException(pipeline));
 		log.info("ETL run started: runId={}, pipeline={}", runId, pipeline);
+		return runId;
+	}
+
+	public void executeRun(long runId) {
 		try {
 			var checkpoint = checkpointRepo.get(pipeline);
 			while (true) {
@@ -68,7 +78,6 @@ public class EtlPipeline implements ApplicationRunner {
 			}
 			runRepo.finish(runId, "SUCCESS");
 			log.info("ETL run finished: runId={}, status=SUCCESS", runId);
-			return runId;
 		}
 		catch (InterruptedException e) {
 			Thread.currentThread().interrupt();

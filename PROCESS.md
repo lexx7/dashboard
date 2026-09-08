@@ -39,3 +39,15 @@
   зелёный: старая версия не перезаписывает новую, повтор равной версии — no-op (FR-4).
   Реализация: `WHERE products_mart.updated_at < EXCLUDED.updated_at` в upsert `MartRepo`.
   Поломок не было.
+
+- 2026-09-08 | Phase 6 (T027–T031, US4 REST/расписание) | OK | `EtlApiTest` (3 теста)
+  зелёный: POST /api/etl/run → runId, GET /api/etl/run/{id} → статус/счётчики,
+  активный прогон → 409, неизвестный id → 404 (FR-7, FR-8). Реализация:
+  - `EtlPipeline` разделён на `beginRun`/`executeRun`; защита от конкурентных запусков —
+    атомарный `INSERT ... WHERE NOT EXISTS (RUNNING)` в `RunRepo.tryStart` +
+    `RunConflictException` → 409.
+  - POST запускает прогон асинхронно через `applicationTaskExecutor`, возвращает runId.
+  - `ScheduledEtlRunner` через `SchedulingConfigurer` (fixedDelay = `etl.poll-interval`,
+    Duration); в тестах отключён свойством `etl.scheduling.enabled=false`.
+  Поломок не было. Замечание: JSON в Boot 4 — Jackson 3 (`tools.jackson`), поэтому
+  ручная сериализация payload в `StagingRepo` (Phase 3) была необходимой.

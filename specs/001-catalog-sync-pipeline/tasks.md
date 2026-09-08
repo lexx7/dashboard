@@ -131,14 +131,14 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ### Tests for User Story 4
 
-- [ ] T027 [P] [US4] Интеграционный `EtlApiTest` в `src/test/java/com/example/dashboard/EtlApiTest.java`: `POST /api/etl/run` → 200 с `runId`; `GET /api/etl/run/{id}` → статус и счётчики; запуск во время активного прогона → 409; неизвестный id → 404. Тест падает до реализации.
+- [x] T027 [P] [US4] Интеграционный `EtlApiTest` в `src/test/java/com/example/dashboard/EtlApiTest.java`: `POST /api/etl/run` → 200 с `runId`; `GET /api/etl/run/{id}` → статус и счётчики; запуск во время активного прогона → 409; неизвестный id → 404. Тест падает до реализации.
 
 ### Implementation for User Story 4
 
-- [ ] T028 [US4] `EtlController` в `src/main/java/com/example/dashboard/api/EtlController.java`: `POST /api/etl/run`, `GET /api/etl/run/{id}` по contracts/operational-api.md (FR-7, FR-8)
-- [ ] T029 [US4] Защита от конкурентных запусков: advisory lock / проверка `RUNNING` в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java` (plan.md §9)
-- [ ] T030 [US4] `@Scheduled` триггер инкрементального прогона с интервалом 60 секунд (настраивается, plan.md §3) в `src/main/java/com/example/dashboard/pipeline/ScheduledEtlRunner.java` (FR-7)
-- [ ] T031 [US4] Прогнать `src/test/java/com/example/dashboard/EtlApiTest.java` до зелёного состояния
+- [x] T028 [US4] `EtlController` в `src/main/java/com/example/dashboard/api/EtlController.java`: `POST /api/etl/run`, `GET /api/etl/run/{id}` по contracts/operational-api.md (FR-7, FR-8)
+- [x] T029 [US4] Защита от конкурентных запусков: advisory lock / проверка `RUNNING` в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java` (plan.md §9)
+- [x] T030 [US4] `@Scheduled` триггер инкрементального прогона с интервалом 60 секунд (настраивается, plan.md §3) в `src/main/java/com/example/dashboard/pipeline/ScheduledEtlRunner.java` (FR-7)
+- [x] T031 [US4] Прогнать `src/test/java/com/example/dashboard/EtlApiTest.java` до зелёного состояния
 
 **Checkpoint**: US4 работает; пайплайн автономен и управляется через REST.
 

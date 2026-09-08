@@ -25,6 +25,7 @@ public abstract class AbstractIntegrationTest {
 		registry.add("spring.datasource.mart.jdbc-url", MART_DB::getJdbcUrl);
 		registry.add("spring.datasource.mart.username", MART_DB::getUsername);
 		registry.add("spring.datasource.mart.password", MART_DB::getPassword);
+		registry.add("etl.scheduling.enabled", () -> "false");
 	}
 
 }
