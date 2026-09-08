@@ -41,12 +41,12 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 **Purpose**: Схемы БД, конфигурация двух DataSource и базовая тестовая инфраструктура —
 без них нельзя начинать ни одну историю.
 
-- [ ] T005 Миграция источника `src/main/resources/db/migration/source/V1__products.sql`: таблица `products(sku, name, price, updated_at)` + индекс `ix_products_updated (updated_at, sku)` (data-model.md)
-- [ ] T006 [P] Миграция витрины `src/main/resources/db/migration/mart/V1__mart_schema.sql`: `staging_raw`, `products_mart`, `etl_checkpoint`, `etl_run`, `etl_error` по data-model.md
-- [ ] T007 Конфигурация двух БД: `SourceDbConfig` (read-only) и `MartDbConfig` (`martTransactionManager`) в `src/main/java/com/example/dashboard/config/`
-- [ ] T008 [P] Типы данных: `SourceProduct` в `src/main/java/com/example/dashboard/source/`, `BatchResult` в `.../pipeline/`, `ReconcileReport` в `.../reconcile/`
-- [ ] T009 [P] Базовый класс интеграционных тестов с двумя PostgreSQL Testcontainers в `src/test/java/com/example/dashboard/AbstractIntegrationTest.java`
-- [ ] T010 [P] Структурное JSON-логирование (logback) в `src/main/resources/logback-spring.xml` (FR-8)
+- [x] T005 Миграция источника `src/main/resources/db/migration/source/V1__products.sql`: таблица `products(sku, name, price, updated_at)` + индекс `ix_products_updated (updated_at, sku)` (data-model.md)
+- [x] T006 [P] Миграция витрины `src/main/resources/db/migration/mart/V1__mart_schema.sql`: `staging_raw`, `products_mart`, `etl_checkpoint`, `etl_run`, `etl_error` по data-model.md
+- [x] T007 Конфигурация двух БД: `SourceDbConfig` (read-only) и `MartDbConfig` (`martTransactionManager`) в `src/main/java/com/example/dashboard/config/`
+- [x] T008 [P] Типы данных: `SourceProduct` в `src/main/java/com/example/dashboard/source/`, `BatchResult` в `.../pipeline/`, `ReconcileReport` в `.../reconcile/`
+- [x] T009 [P] Базовый класс интеграционных тестов с двумя PostgreSQL Testcontainers в `src/test/java/com/example/dashboard/AbstractIntegrationTest.java`
+- [x] T010 [P] Структурное JSON-логирование (logback) в `src/main/resources/logback-spring.xml` (FR-8)
 
 **Checkpoint**: инфраструктура готова — можно параллельно начинать истории.
 

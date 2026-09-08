@@ -13,6 +13,11 @@ spring:
   flyway:
     enabled: false # миграции запускаются per-datasource в Phase 2 (SourceDbConfig/MartDbConfig)
 
+logging:
+  structured:
+    format:
+      console: logstash # FR-8: структурные JSON-логи (нативный форматтер Spring Boot)
+
 etl:
   pipeline: catalog-sync
   batch-size: 1000
