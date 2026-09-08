@@ -29,10 +29,10 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ## Phase 1: Setup (инициализация проекта)
 
-- [ ] T001 Добавить зависимости в `build.gradle`: spring-boot-starter-jdbc, flyway-core, flyway-database-postgresql, postgresql (runtime); test: testcontainers (junit-jupiter, postgresql); создать `src/main/java/com/example/dashboard/EtlApplication.java`
+- [ ] T001 Добавить зависимости в `build.gradle`: spring-boot-starter-jdbc, flyway-core, flyway-database-postgresql, postgresql (runtime); test: testcontainers (junit-jupiter, postgresql); добавить `@EnableScheduling` в существующий `src/main/java/com/example/dashboard/DashboardApplication.java` (новый application-класс НЕ создавать — plan.md §6)
 - [ ] T002 [P] Создать `docker-compose.yml` в корне репозитория: сервисы `db-source` и `db-mart` (PostgreSQL 17, отдельные порты и volume'ы)
 - [ ] T003 [P] Подключить плагин Spotless в `build.gradle` (конфигурация для Java)
-- [ ] T004 [P] Создать `src/main/resources/application.yml`: два DataSource (`source`, `mart`), размер батча, окно отставания 30s, расписание опроса и cron сверки 03:00
+- [ ] T004 [P] Создать `src/main/resources/application.yml`: два DataSource (`source`, `mart`), размер батча (настраиваемый, по умолчанию 1000 — plan.md §3), окно отставания 30s, интервал опроса источника 60 секунд (plan.md §3) и cron сверки 03:00
 
 ---
 
@@ -71,7 +71,7 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 - [ ] T013 [P] [US1] `StagingRepo.insertAll` в `src/main/java/com/example/dashboard/mart/StagingRepo.java`: сохранение сырых записей с `run_id` (FR-5)
 - [ ] T014 [P] [US1] `RunRepo` в `src/main/java/com/example/dashboard/mart/RunRepo.java`: start/finish/addStats по `etl_run` (FR-8)
 - [ ] T015 [P] [US1] `MartRepo.upsertAll` в `src/main/java/com/example/dashboard/mart/MartRepo.java`: батчевый `INSERT ... ON CONFLICT (sku) DO UPDATE` (FR-3)
-- [ ] T016 [US1] `SourceReader.fetchSince(Instant cursor, String afterSku, int limit)` в `src/main/java/com/example/dashboard/source/SourceReader.java`: курсорная выборка `(updated_at, sku) > (?, ?)` с окном отставания `updated_at < now() - 30s` (FR-1, research R2)
+- [ ] T016 [P] [US1] `SourceReader.fetchSince(Instant cursor, String afterSku, int limit)` в `src/main/java/com/example/dashboard/source/SourceReader.java`: курсорная выборка `(updated_at, sku) > (?, ?)` с окном отставания `updated_at < now() - 30s` (FR-1, research R2)
 - [ ] T017 [US1] `MartLoader.loadBatch` в `src/main/java/com/example/dashboard/mart/MartLoader.java`: `@Transactional("martTransactionManager")` — staging → upsert → checkpoint → статистика атомарно (FR-2, FR-3, plan.md §8)
 - [ ] T018 [US1] `EtlPipeline` в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java`: цикл батчей `extract → loadBatch` до исчерпания, создание/завершение прогона через `RunRepo` (FR-1, FR-8)
 - [ ] T019 [US1] Прогнать `src/test/java/com/example/dashboard/IncrementalSyncTest.java` до зелёного состояния
@@ -137,7 +137,7 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 - [ ] T028 [US4] `EtlController` в `src/main/java/com/example/dashboard/api/EtlController.java`: `POST /api/etl/run`, `GET /api/etl/run/{id}` по contracts/operational-api.md (FR-7, FR-8)
 - [ ] T029 [US4] Защита от конкурентных запусков: advisory lock / проверка `RUNNING` в `src/main/java/com/example/dashboard/pipeline/EtlPipeline.java` (plan.md §9)
-- [ ] T030 [US4] `@Scheduled` триггер инкрементального прогона в `src/main/java/com/example/dashboard/pipeline/ScheduledEtlRunner.java` (FR-7)
+- [ ] T030 [US4] `@Scheduled` триггер инкрементального прогона с интервалом 60 секунд (настраивается, plan.md §3) в `src/main/java/com/example/dashboard/pipeline/ScheduledEtlRunner.java` (FR-7)
 - [ ] T031 [US4] Прогнать `src/test/java/com/example/dashboard/EtlApiTest.java` до зелёного состояния
 
 **Checkpoint**: US4 работает; пайплайн автономен и управляется через REST.
@@ -198,7 +198,7 @@ US2–US5 зависят от US1 (ядро пайплайна); между со
 
 - Phase 1: T002, T003, T004 — параллельно (разные файлы), после T001.
 - Phase 2: T006, T008, T009, T010 — параллельно; T005 независим; T007 после миграций.
-- Phase 3: T012–T015 (репозитории, разные файлы) — параллельно; T016–T018 —
+- Phase 3: T012–T016 (репозитории и SourceReader, разные файлы) — параллельно; T017–T018 —
   последовательно.
 - Phase 7: T032 и T033 (тесты) — параллельно; T035 и T036 — параллельно после T034.
 - Phase 8: T038 и T040 — параллельно.

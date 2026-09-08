@@ -57,6 +57,7 @@
 - Каждый батч: staging-insert → mart-upsert → checkpoint-advance выполняются
   **в одной транзакции на db-mart** (FR-2, FR-3). Extract — read-only,
   транзакция источника не держится.
+- Размер батча можно задавать в application, по-умолчанию равен 1000
 - Идемпотентность: upsert по PK `sku` с условием
   `WHERE products_mart.updated_at < EXCLUDED.updated_at` (FR-4, US-3).
 - Битая запись: валидация до upsert, в `etl_error` + исключение из батча
@@ -64,6 +65,7 @@
 - Курсор с миллисекундной гранулярностью: выборка `updated_at > :cursor`
     + tie-breaker по `sku` — пар `(updated_at, sku)` — чтобы не потерять
       записи с одинаковой отметкой (граничный случай из спеки).
+- Интервал опроса источника 60 секунд
 
 ## 4. Модель данных
 
@@ -85,9 +87,20 @@ CREATE INDEX ix_products_updated ON products (updated_at, sku); -- под кур
 ### db-mart (миграции `mart/V*.sql`)
 
 ```sql
+CREATE TABLE etl_run (                   -- FR-8
+    id           BIGSERIAL PRIMARY KEY,
+    pipeline     TEXT NOT NULL,
+    started_at   TIMESTAMPTZ NOT NULL,
+    finished_at  TIMESTAMPTZ,
+    status       TEXT NOT NULL,          -- RUNNING / SUCCESS / FAILED
+    rows_staged  BIGINT DEFAULT 0,
+    rows_loaded  BIGINT DEFAULT 0,
+    rows_failed  BIGINT DEFAULT 0
+);
+
 CREATE TABLE staging_raw (               -- FR-5, US-5: аудит «как есть»
     id         BIGSERIAL PRIMARY KEY,
-    run_id     BIGINT NOT NULL,
+    run_id     BIGINT NOT NULL REFERENCES etl_run (id),
     sku        TEXT NOT NULL,
     payload    JSONB NOT NULL,           -- сырой снимок записи
     staged_at  TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -107,20 +120,9 @@ CREATE TABLE etl_checkpoint (            -- FR-2
     last_sku    TEXT NOT NULL DEFAULT '' -- tie-breaker курсора
 );
 
-CREATE TABLE etl_run (                   -- FR-8
-    id           BIGSERIAL PRIMARY KEY,
-    pipeline     TEXT NOT NULL,
-    started_at   TIMESTAMPTZ NOT NULL,
-    finished_at  TIMESTAMPTZ,
-    status       TEXT NOT NULL,          -- RUNNING / SUCCESS / FAILED
-    rows_staged  BIGINT DEFAULT 0,
-    rows_loaded  BIGINT DEFAULT 0,
-    rows_failed  BIGINT DEFAULT 0
-);
-
 CREATE TABLE etl_error (                 -- FR-6
     id        BIGSERIAL PRIMARY KEY,
-    run_id    BIGINT NOT NULL,
+    run_id    BIGINT NOT NULL REFERENCES etl_run (id),
     sku       TEXT,
     payload   JSONB,
     reason    TEXT NOT NULL
@@ -162,7 +164,7 @@ dashboard/
 ├── docker-compose.yml           # db-source, db-mart
 ├── build.gradle
 ├── src/main/java/com/example/dashboard/
-│   ├── EtlApplication.java
+│   ├── DashboardApplication.java
 │   ├── config/      SourceDbConfig, MartDbConfig   # два DataSource
 │   ├── source/      SourceReader, SourceProduct
 │   ├── pipeline/    EtlPipeline, BatchResult

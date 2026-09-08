@@ -28,7 +28,7 @@
 | Поле | Тип | Ограничения | Комментарий |
 |------|-----|-------------|-------------|
 | id | BIGSERIAL | PK | |
-| run_id | BIGINT | NOT NULL, FK-логика к etl_run | Прогон-владелец |
+| run_id | BIGINT | NOT NULL, FK → etl_run(id) | Прогон-владелец |
 | sku | TEXT | NOT NULL | Идентификатор товара |
 | payload | JSONB | NOT NULL | Сырой снимок записи «как есть» |
 | staged_at | TIMESTAMPTZ | NOT NULL DEFAULT now() | Время чтения |
@@ -81,7 +81,7 @@
 | Поле | Тип | Ограничения | Комментарий |
 |------|-----|-------------|-------------|
 | id | BIGSERIAL | PK | |
-| run_id | BIGINT | NOT NULL | Прогон-владелец |
+| run_id | BIGINT | NOT NULL, FK → etl_run(id) | Прогон-владелец |
 | sku | TEXT | nullable | Может отсутствовать у совсем битой записи |
 | payload | JSONB | nullable | Сырая запись |
 | reason | TEXT | NOT NULL | Причина отклонения |
