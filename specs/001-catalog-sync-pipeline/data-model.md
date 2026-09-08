@@ -23,6 +23,22 @@
 
 ## db-mart
 
+### etl_run — журнал прогонов (FR-8)
+
+| Поле | Тип | Ограничения | Комментарий |
+|------|-----|-------------|-------------|
+| id | BIGSERIAL | PK | Идентификатор прогона |
+| pipeline | TEXT | NOT NULL | |
+| started_at | TIMESTAMPTZ | NOT NULL | |
+| finished_at | TIMESTAMPTZ | nullable | NULL = прогон в работе |
+| status | TEXT | NOT NULL | `RUNNING` → `SUCCESS` / `FAILED` |
+| rows_staged | BIGINT | DEFAULT 0 | Прочитано из источника |
+| rows_loaded | BIGINT | DEFAULT 0 | Загружено в витрину |
+| rows_failed | BIGINT | DEFAULT 0 | Отклонено валидацией |
+
+Инвариант: `rows_staged = rows_loaded + rows_failed` на завершённом прогоне.
+Конкурентные запуски исключены: один `RUNNING` на пайплайн + advisory lock (FR-7).
+
 ### staging_raw — аудит сырых записей (FR-5)
 
 | Поле | Тип | Ограничения | Комментарий |
@@ -59,22 +75,6 @@
 
 Переходы состояния: курсор монотонно растёт по `(last_cursor, last_sku)`; продвигается
 только в транзакции успешного батча (атомарно с загрузкой).
-
-### etl_run — журнал прогонов (FR-8)
-
-| Поле | Тип | Ограничения | Комментарий |
-|------|-----|-------------|-------------|
-| id | BIGSERIAL | PK | Идентификатор прогона |
-| pipeline | TEXT | NOT NULL | |
-| started_at | TIMESTAMPTZ | NOT NULL | |
-| finished_at | TIMESTAMPTZ | nullable | NULL = прогон в работе |
-| status | TEXT | NOT NULL | `RUNNING` → `SUCCESS` / `FAILED` |
-| rows_staged | BIGINT | DEFAULT 0 | Прочитано из источника |
-| rows_loaded | BIGINT | DEFAULT 0 | Загружено в витрину |
-| rows_failed | BIGINT | DEFAULT 0 | Отклонено валидацией |
-
-Инвариант: `rows_staged = rows_loaded + rows_failed` на завершённом прогоне.
-Конкурентные запуски исключены: один `RUNNING` на пайплайн + advisory lock (FR-7).
 
 ### etl_error — журнал битых записей (FR-6)
 
