@@ -22,6 +22,7 @@ public class MartRepo {
 				VALUES (?, ?, ?, ?)
 				ON CONFLICT (sku) DO UPDATE
 				SET name = EXCLUDED.name, price = EXCLUDED.price, updated_at = EXCLUDED.updated_at
+				WHERE products_mart.updated_at < EXCLUDED.updated_at
 				""", batch, batch.size(), (ps, product) -> {
 			ps.setString(1, product.sku());
 			ps.setString(2, product.name());

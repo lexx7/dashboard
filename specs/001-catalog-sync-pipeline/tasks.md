@@ -110,12 +110,12 @@ Gradle, Java 25, Spring Boot 4.x, новый код в пакете `com.example
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] `OutOfOrderTest` в `src/test/java/com/example/dashboard/OutOfOrderTest.java`: запись со старым `updated_at` не перезаписывает новую; повтор той же версии — no-op. Тест падает до реализации.
+- [x] T024 [P] [US3] `OutOfOrderTest` в `src/test/java/com/example/dashboard/OutOfOrderTest.java`: запись со старым `updated_at` не перезаписывает новую; повтор той же версии — no-op. Тест падает до реализации.
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Добавить защиту от устаревших версий в upsert `src/main/java/com/example/dashboard/mart/MartRepo.java`: `WHERE products_mart.updated_at < EXCLUDED.updated_at` (FR-4, plan.md §8)
-- [ ] T026 [US3] Прогнать `src/test/java/com/example/dashboard/OutOfOrderTest.java` до зелёного состояния
+- [x] T025 [US3] Добавить защиту от устаревших версий в upsert `src/main/java/com/example/dashboard/mart/MartRepo.java`: `WHERE products_mart.updated_at < EXCLUDED.updated_at` (FR-4, plan.md §8)
+- [x] T026 [US3] Прогнать `src/test/java/com/example/dashboard/OutOfOrderTest.java` до зелёного состояния
 
 **Checkpoint**: US3 работает; витрина защищена от «отката» версий.
 

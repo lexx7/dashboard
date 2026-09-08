@@ -34,3 +34,8 @@
   проверка `Thread.isInterrupted()` между батчами в `EtlPipeline.run()` +
   `ApplicationRunner`-хук `failOrphanedRuns` (осиротевшие RUNNING → FAILED при старте).
   Поломок не было.
+
+- 2026-09-08 | Phase 5 (T024–T026, US3 защита версий) | OK | `OutOfOrderTest` (2 теста)
+  зелёный: старая версия не перезаписывает новую, повтор равной версии — no-op (FR-4).
+  Реализация: `WHERE products_mart.updated_at < EXCLUDED.updated_at` в upsert `MartRepo`.
+  Поломок не было.
